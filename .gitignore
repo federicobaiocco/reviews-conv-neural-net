@@ -1,0 +1,9 @@
+./runs
+./presentacion
+./packages
+./embeddings
+./data
+./cursos
+./.ipynb_checkpoints
+mix.*
+cnn_tf1.*
