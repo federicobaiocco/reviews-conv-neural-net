@@ -6,4 +6,4 @@ data/*
 cursos/*
 .ipynb_checkpoints/*
 mix.*
-cnn_tf1.*
+cnn-tf1.*
