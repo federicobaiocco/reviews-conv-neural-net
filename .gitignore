@@ -9,6 +9,9 @@ scripts/*
 mix.*
 cnn-tf1.*
 
+*.kv
+*.npy
+
 .Dockerfile
 .dockerignore
 .circleci/*
