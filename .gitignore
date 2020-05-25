@@ -9,6 +9,7 @@ scripts/*
 mix.*
 cnn-tf1.*
 
+*.pkl
 *.kv
 *.npy
 
