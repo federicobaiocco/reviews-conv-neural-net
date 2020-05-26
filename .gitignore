@@ -1,14 +1,14 @@
 runs/*
 presentacion/*
-embeddings/*
-data/*
 cursos/*
 packages/*
 scripts/*
 .ipynb_checkpoints/*
 mix.*
 cnn-tf1.*
-
+word_embeddings/*
+notebooks/data
+notebooks/embeddings
 *.pkl
 *.kv
 *.npy
@@ -42,9 +42,6 @@ wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
@@ -123,14 +120,10 @@ venv.bak/
 # pycharm
 .idea/
 
-# datafiles
-#packages/reviews_cnn_model/reviews_cnn_model/datasets/*.csv
-test_data_predictions.csv
-
 # all logs
 logs/
 
-# trained models (will be created in CI)
+# trained models
 packages/reviews_cnn_model/reviews_cnn_model/trained_models/*.pkl
 packages/reviews_cnn_model/reviews_cnn_model/trained_models/*.h5
 *.h5
