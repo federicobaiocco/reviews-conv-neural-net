@@ -43,9 +43,6 @@ class TextPreprocessor():
         vocab_size = len(word_index) + 1
         print("Vocabulary Size : {}".format(vocab_size))
         x = pad_sequences(sequences, maxlen=self.pad_text_to) # Pad with 0.0 (default pad_sequences value)
-        #persist tokenizer
-        #with open(config.TOKENIZER_PATH, 'wb') as handle:
-        #    pickle.dump(self.tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         # Shuffle data
         np.random.seed(10)
@@ -64,10 +61,6 @@ class TextPreprocessor():
         return x_train, y_train, vocab_size, word_index, x_test, y_test
    
     def transform(self, text):
-        #load persisted tokenizer
-        #tokenizer = None
-        #with open(config.TOKENIZER_PATH, 'rb') as handle:
-        #    tokenizer = pickle.load(handle)
         stripped = [s.strip() for s in text]
         clean = [self.clean_str(sent) for sent in stripped]
         sequences = self.tokenizer.texts_to_sequences(clean)
