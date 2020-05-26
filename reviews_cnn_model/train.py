@@ -1,5 +1,4 @@
 from reviews_cnn_package.model import train_pipeline
 
-if __name__ == 'main':
-    result = train_pipeline.train_model()
-    print(result)
+result = train_pipeline.train_model(from_checkpoint=False)
+print(result)
