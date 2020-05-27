@@ -6,5 +6,5 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY . .
 ADD https://zenodo.org/record/1410403/files/keyed_vectors.zip?download=1 /reviews_cnn_model/word_embeddings/
-#RUN mv /reviews_cnn_model/word_embeddings/keyed_vectors/* /reviews_cnn_model/word_embeddings/
+RUN python -m spacy download es_core_news_sm
 RUN python train.py
