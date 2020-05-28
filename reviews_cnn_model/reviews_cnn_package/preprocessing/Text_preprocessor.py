@@ -6,6 +6,7 @@ from reviews_cnn_package.config import config
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 import os
+import unicodedata
 
 class TextPreprocessor():
     
@@ -81,6 +82,7 @@ class TextPreprocessor():
         string = re.sub(r"\)", " \) ", string)
         string = re.sub(r"\?", " \? ", string)
         string = re.sub(r"\s{2,}", " ", string) #2 spaces
+        string = self.strip_accents(string)
         #replace words according the transform_dict
         string = ''.join(config.transform_dict[w.lower()] if w.lower() in config.transform_dict else w for w in re.split(r'(\W+)', string))
         #remove insurance company names and non important words
@@ -88,10 +90,21 @@ class TextPreprocessor():
         string = ''.join(w.lower() if w.lower() not in stop_words else '' for w in re.split(r'(\W+)', string))
         
         doc = self.nlp(string)
-        string = ' '.join([token.lemma_ for token in doc if not token.is_stop])
+        string = ' '.join([token.lemma_ for token in doc])
         
         return string.strip().lower()
     
+    def strip_accents(self, text):
+
+        try:
+            text = unicode(text, 'utf-8')
+        except NameError: # unicode is a default on python 3 
+            pass
+        text = unicodedata.normalize('NFD', text)\
+               .encode('ascii', 'ignore')\
+               .decode("utf-8")
+        return str(text)
+
     def make_dataset(self):
         approved_dataframe = pd.read_csv(os.path.join(config.DATASET_DIR, 'all_approved.csv'))
         disapproved_dataframe = pd.read_csv(os.path.join(config.DATASET_DIR, 'all_disapproved.csv'))

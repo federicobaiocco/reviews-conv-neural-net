@@ -3,15 +3,15 @@ import os
 #GLOBAL VALUES
 TEST_SPLIT = 0.15
 FILTER_SIZES = [2,3,4]
-NUM_FILTERS = 512
-DROPOUT = 0.5 #dropout
+NUM_FILTERS = 256
+DROPOUT = 0.5
 BATCH_SIZE = 32
-EPOCHS = 10
-LEARNING_RATE = 1e-4
-EARLY_STOPPING_PATIENCE = 2
+EPOCHS = 25
+LEARNING_RATE = 1e-3
+EARLY_STOPPING_PATIENCE = 3
 
 #STOP WORDS
-insurance_company_names = ['rivadavia','allianz','hdi','pelayo','verti','ocaso','iati','meridional','sancor','prudential']
+insurance_company_names = ['falabella','sura','rivadavia','allianz','hdi','pelayo','verti','ocaso','iati','meridional','sancor','prudential','patagonia']
 transform_dict = {
     'k':'que',
     'q':'que',
@@ -24,10 +24,8 @@ transform_dict = {
     'imbesil': 'imbecil',
     'imbesiles': 'imbeciles'
 }
-non_important_words = ['seguro','seguros']
+non_important_words = ['seguro','seguros', 'hola', 'whatsapp','banco','auto','moto','vehiculo']
 
-#PWD = os.path.dirname(os.path.abspath(__file__))
-#PACKAGE_ROOT = os.path.abspath(os.path.join(PWD, '..'))
 PWD = os.path.dirname(os.path.abspath(__file__))
 PACKAGE_ROOT = os.path.abspath(os.path.join(PWD, '..'))
 DATASET_DIR = os.path.join(PACKAGE_ROOT, 'datasets')
