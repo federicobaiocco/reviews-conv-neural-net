@@ -11,7 +11,7 @@ LEARNING_RATE = 1e-4
 EARLY_STOPPING_PATIENCE = 2
 
 #STOP WORDS
-insurance_company_names = ['rivadavia','allianz','hdi','pelayo','verti','ocaso','iati','meridional','sancor','prudential']
+insurance_company_names = ['falabella','sura','rivadavia','allianz','hdi','pelayo','verti','ocaso','iati','meridional','sancor','prudential','patagonia']
 transform_dict = {
     'k':'que',
     'q':'que',
@@ -24,7 +24,7 @@ transform_dict = {
     'imbesil': 'imbecil',
     'imbesiles': 'imbeciles'
 }
-non_important_words = ['seguro','seguros']
+non_important_words = ['seguro','seguros', 'hola', 'whatsapp','banco','auto','moto','vehiculo']
 
 #PWD = os.path.dirname(os.path.abspath(__file__))
 #PACKAGE_ROOT = os.path.abspath(os.path.join(PWD, '..'))
