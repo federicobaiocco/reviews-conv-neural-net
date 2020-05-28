@@ -7,7 +7,11 @@ scripts/*
 mix.*
 cnn-tf1.*
 word_embeddings/*
-notebooks/data
+notebooks/data/.ipynb_checkpoints
+notebooks/data/seguros-por-aseguradora.csv
+notebooks/data/seguros-por-auto.csv
+notebooks/data/seguros-por-tipo.csv
+notebooks/data/seguros-por-provincia.csv
 notebooks/embeddings
 *.pkl
 *.kv
