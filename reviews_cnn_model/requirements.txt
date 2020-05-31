@@ -10,3 +10,5 @@ requests==2.23.0
 spacy==2.2.3
 tensorflow==2.1.0
 unidecode
+pymongo==3.10.1
+flask_pymongo==2.3.0

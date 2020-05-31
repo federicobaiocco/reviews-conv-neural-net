@@ -7,6 +7,9 @@ services:
     build: ./reviews_cnn_model
     ports:
       - "8000:8000"
+    environment:
+      - env=prod
+      - DB=mongodb://mongodb:27017/reviews_db
     command: gunicorn -w 1 -b 0.0.0.0:8000 wsgi:app
   
   nginx:
@@ -17,3 +20,15 @@ services:
       - "80:80"
     depends_on:
       - api
+
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/usr/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/usr/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
