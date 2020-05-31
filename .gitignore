@@ -16,6 +16,7 @@ notebooks/embeddings
 *.pkl
 *.kv
 *.npy
+notebooks/model.png
 
 .circleci/*
 .vscode/*
