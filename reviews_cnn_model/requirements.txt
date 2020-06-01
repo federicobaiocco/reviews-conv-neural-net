@@ -12,3 +12,4 @@ tensorflow==2.1.0
 unidecode
 pymongo==3.10.1
 flask_pymongo==2.3.0
+flask_cors==3.0.8

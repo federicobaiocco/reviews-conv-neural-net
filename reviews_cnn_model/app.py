@@ -7,8 +7,10 @@ import json
 import datetime
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 
 if(os.environ.get('env') == 'prod'):
     app.config['MONGO_URI'] = os.environ.get('DB')
@@ -26,19 +28,35 @@ def health():
         return 'ok'
 
 @app.route('/predict', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def make_prediction():
     print(request)
     if request.method == 'POST':
         request_json_data = request.json
         review_text = request_json_data['review_text']
-
+        
         result = predict(review = review_text)
         
+        if result['prediction']['approved'] > 0.5:
+            prediction = 1
+        else:
+            prediction = 0
+
+        review = {
+            "text": review_text,
+            "prediction": prediction,
+            "checked": 0,
+            "true_label": None
+        }
+        _id = mongo.db.reviews.insert_one(review)
+
         return jsonify(
             {'prediction': str(result['prediction']),
-             'model_version': str(config.MODEL_VERSION)})
+            '_id': str(_id),
+            'model_version': str(config.MODEL_VERSION)})
 
 @app.route('/reviews', methods=['GET', 'POST', 'PATCH'])
+@cross_origin(supports_credentials=True)
 def review():
     '''
     review: {
@@ -61,7 +79,7 @@ def review():
     if request.method == 'POST':
         if request_json.get('text', None) is not None and \
             request_json.get('prediction', None) is not None:
-            request_json['checked'] = False # Default value
+            request_json['checked'] = 0 # Default value
             request_json['true_label'] = None # Default value
             mongo.db.reviews.insert_one(request_json)
             return jsonify({'OK': True, 'message': 'Created'}), 200
@@ -89,6 +107,7 @@ def review():
             return jsonify({'OK': False, 'message': 'Required params are missing'}), 400
 
 @app.route('/reviews/approved', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def approved_reviews():
     if request.method == 'GET':
         documents = mongo.db.reviews.find({
@@ -110,6 +129,7 @@ def approved_reviews():
         return jsonify(response[:10]), 200
 
 @app.route('/train_data', methods=['GET', 'POST', 'PATCH'])
+@cross_origin(supports_credentials=True)
 def train_data():
     '''
     train_data: {
@@ -117,7 +137,6 @@ def train_data():
         state: Bool -> 1 = Approved ; 0 = Disapproved
     }
     '''
-    request_json = request.json
 
     if request.method == 'GET':
         documents = mongo.db.train_data.find({})
