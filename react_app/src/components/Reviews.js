@@ -21,8 +21,8 @@ class Reviews extends Component{
                     <tr>
                         <th style={{width: '35%', textAlign : 'center'}}>Text</th>
                         <th style={{width: '15%', textAlign : 'center'}}>Prediction</th>
-                        <th style={{width: '15%', textAlign : 'center'}}>Confirm</th>
-                        <th style={{width: '15%', textAlign : 'center'}}>Deny</th>
+                        <th style={{width: '15%', textAlign : 'center'}}>Mark as approved</th>
+                        <th style={{width: '15%', textAlign : 'center'}}>Mark as disapproved</th>
                     </tr>
                 </thead>
                 <tbody>

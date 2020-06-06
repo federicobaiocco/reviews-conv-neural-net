@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class ReviewItem extends Component{
     getStyle = () => {
         return {
-            // textDecoration: this.props.todo.completed ? 'line-through' : 'none',
             background: 'f4f4f4',
             padding: '10px',
             borderBottom: '1px #ccc dotted'
@@ -12,16 +11,17 @@ class ReviewItem extends Component{
     };
 
     render() {
-        const { _id, text, prediction } = this.props.review;
+        const { text, prediction } = this.props.review;
+        const review = this.props.review;
         return (
             <tr>
                 <td style={{textAlign : 'left'}}>{text}</td>
-                <td style={{textAlign : 'center', color: prediction == 1 ? 'green': 'red'}}>{prediction == 1 ? 'APPROVED' : 'DISAPPROVED'}</td>
+                <td style={{textAlign : 'center', color: prediction === 1 ? 'green': 'red'}}>{prediction == 1 ? 'APPROVED' : 'DISAPPROVED'}</td>
                 <td style={{textAlign : 'center'}}>
-                    <button onClick={this.props.approveReview.bind(this, _id)} style={approveBtnStyle}>OK</button>
+                    <button onClick={this.props.approveReview.bind(this, review)} style={approveBtnStyle}>✓</button>
                 </td>
                 <td style={{textAlign : 'center'}}>
-                    <button onClick={this.props.disapproveReview.bind(this, _id)} style={disapproveBtnStyle}>X</button>
+                    <button onClick={this.props.disapproveReview.bind(this, review)} style={disapproveBtnStyle}>X</button>
                 </td>
             </tr>
         )

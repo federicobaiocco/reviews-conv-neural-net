@@ -23,7 +23,7 @@ class App extends Component{
     }
 
     getReviews() {
-        axios.get('http://localhost:5000/reviews')
+        axios.get('http://localhost:5000/reviews/pending')
         .then( res => {
             this.setState({
                 reviews: res.data
@@ -37,16 +37,41 @@ class App extends Component{
             this.setState({
                 approvedReviews: res.data
             });
-            console.log(res.data)
         });
     }
 
-    approveReview() {
-
+    approveReview = (review) => {
+        const req_data = {
+            "query": {
+                "_id": review._id
+            },
+            "payload": {
+                "checked": 1,
+                "true_label": 1
+            }
+        }
+        axios.patch('http://localhost:5000/reviews', req_data)
+        .then(res => {
+            this.getAppovedReviews();
+            this.getReviews();
+        });
     }
 
-    disapproveReview() {
-
+    disapproveReview = (review) => {
+        const req_data = {
+            "query": {
+                "_id": review._id
+            },
+            "payload": {
+                "checked": 1,
+                "true_label": 0
+            }
+        }
+        axios.patch('http://localhost:5000/reviews', req_data)
+        .then(res => {
+            this.getAppovedReviews();
+            this.getReviews();
+        });
     }
 
     addReview = (text) => {
@@ -68,8 +93,27 @@ class App extends Component{
                     approvedReviews: [...prevState.approvedReviews, rev],
                     reviews: [...prevState.reviews, rev]
                 }))
+            } else if (prediction === 0 ){
+                let rev = {
+                    'text': text,
+                    'prediction': 0,
+                    'checked': 0,
+                    'true_label': null,
+                    '_id': res.data._id
+                }
+                this.setState(prevState => ({
+                    approvedReviews: [...prevState.approvedReviews],
+                    reviews: [...prevState.reviews, rev]
+                }))
             }
         });
+    }
+
+    trainModel = () => {
+        axios.post('http://localhost:5000/train_model')
+        .then( res => {
+            console.log(res)
+        })
     }
 
     render() {
@@ -83,6 +127,9 @@ class App extends Component{
                                 <Reviews reviews={this.state.reviews}
                                        approveReview = {this.approveReview}
                                        disapproveReview={this.disapproveReview}/>
+                                <div>
+                                <button onClick={this.trainModel.bind(this)}>Train model</button>
+                                </div>
                             </React.Fragment>
                         )} />
                         <Route exact path='/' render={props => (

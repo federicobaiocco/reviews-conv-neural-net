@@ -8,6 +8,8 @@ import datetime
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
+import pandas as pd
+from datetime import date
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -52,7 +54,7 @@ def make_prediction():
 
         return jsonify(
             {'prediction': str(result['prediction']),
-            '_id': str(_id),
+            '_id': str(_id.inserted_id),
             'model_version': str(config.MODEL_VERSION)})
 
 @app.route('/reviews', methods=['GET', 'POST', 'PATCH'])
@@ -98,7 +100,8 @@ def review():
                 review = mongo.db.reviews.find_one(query, {"_id": False, "text": True, "true_label": True})
                 train_review = {
                     "text": review['text'],
-                    "state": review['true_label']
+                    "state": review['true_label'],
+                    "used": 0
                 }
                 mongo.db.train_data.insert_one(train_review)
 
@@ -126,25 +129,41 @@ def approved_reviews():
         for document in documents:
             document['_id'] = str(document['_id'])
             response.append(document)
-        return jsonify(response[:10]), 200
+        return jsonify(response), 200
 
-@app.route('/train_data', methods=['GET', 'POST', 'PATCH'])
+@app.route('/reviews/pending', methods=['GET'])
 @cross_origin(supports_credentials=True)
-def train_data():
-    '''
-    train_data: {
-        text: String,
-        state: Bool -> 1 = Approved ; 0 = Disapproved
-    }
-    '''
-
+def pending_reviews():
     if request.method == 'GET':
-        documents = mongo.db.train_data.find({})
+        documents = mongo.db.reviews.find({"checked": 0})
         response = []
         for document in documents:
             document['_id'] = str(document['_id'])
             response.append(document)
-        return jsonify(response), 200
+        return jsonify(response[:10]), 200
+
+@app.route('/train_model', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def train_model_endpoint():
+    if request.method == 'POST':
+        train_data = pd.DataFrame(list(mongo.db.train_data.find({"used":0})))
+        mongo.db.train_data.update_many({"used":0},{"$set": {"used":1, "used_date": str(date.today())}})
+        #Approved
+        approved_train_data = train_data[train_data.state == 1][['text','state']]
+        all_approved = pd.read_csv("./reviews_cnn_package/datasets/all_approved.csv")[['text','state']]
+        all_approved_updated = all_approved.append(approved_train_data)
+        all_approved_updated.to_csv('./reviews_cnn_package/datasets/all_approved.csv', index=False)
+
+        #Disapproved
+        disapproved_train_data = train_data[train_data.state == 0][['text','state']]
+        all_disapproved = pd.read_csv("./reviews_cnn_package/datasets/all_disapproved.csv")[['text','state']]
+        all_disapproved_updated = all_disapproved.append(disapproved_train_data)
+        all_disapproved_updated.to_csv('./reviews_cnn_package/datasets/all_disapproved.csv', index=False)
+
+        #Train with all data
+        result = train_model()
+
+        return jsonify(result), 200
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)

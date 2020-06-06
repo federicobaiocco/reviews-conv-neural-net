@@ -45,7 +45,7 @@ def train_model(*, from_checkpoint: bool = False) -> dict:
 
         model.save(str(config.MODEL_PATH))
 
-        return {'result': 'OK'}
+        return {'result': 'OK', 'score': str(model.evaluate(x_test, y_test))}
     except:
         return {'result': 'Error'}
 
