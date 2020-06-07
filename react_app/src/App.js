@@ -25,7 +25,15 @@ class App extends Component{
             type: 'success',
             open: false,
             message: ''
-        }
+        },
+        training_result_snack:
+        {
+            type: 'success',
+            open: false,
+            message: ''
+        },
+        training: false,
+        training_result: null
     };
 
     componentDidMount() {
@@ -130,9 +138,22 @@ class App extends Component{
     }
 
     trainModel = () => {
+        this.setState(prevState => ({
+            training: true
+        }))
         axios.post('http://localhost:5000/train_model')
         .then( res => {
             console.log(res)
+            this.setState(prevState => ({
+                training: false,
+                training_result: res,
+                training_result_snack:
+                {
+                    type: 'success',
+                    open: true,
+                    message: 'Model ready to use ✔ accuracy: ' + res.data.score.split(',')[1].slice(0, -1)
+                }
+            }))
         })
     }
 
@@ -155,7 +176,13 @@ class App extends Component{
             open: false,
             message: '..',
             type: 'info'
-        }
+        },
+        training_result_snack:
+        {
+            type: 'success',
+            open: false,
+            message: ''
+        }        
     }))
 
     render() {
@@ -166,16 +193,35 @@ class App extends Component{
                         <Header/>
                         <Route exact path='/admin' render={props => (
                             <React.Fragment>
-                                <Reviews reviews={this.state.reviews}
-                                       approveReview = {this.approveReview}
-                                       disapproveReview={this.disapproveReview}/>
-                                <div>
-                                <Button onClick={this.trainModel.bind(this)}
-                                        variant="contained" 
-                                        color="primary">
-                                    Train model
-                                </Button>
+                                {   
+                                    this.state.training === false ?
+                                    <div>
+                                        <Reviews reviews={this.state.reviews}
+                                        approveReview = {this.approveReview}
+                                        disapproveReview={this.disapproveReview}/>
+                                        
+                                        <Button onClick={this.trainModel.bind(this)}
+                                                variant="contained" 
+                                                color="primary">
+                                            Train model
+                                        </Button>
+                                    </div> 
+                                    :
+                                    <div style={{'textAlign': 'center', 'marginTop': 15}}>
+                                        <CircularProgress />
+                                        <p>
+                                            Training model 💻🧠 ... 
+                                        </p>
+                                    </div>
+                                }
+                                <div>    
+                                    <Snackbar open={this.state.training_result_snack.open} autoHideDuration={6000} onClose={this.handleClose}>
+                                        <Alert onClose={this.handleClose} severity={this.state.training_result_snack.type}>
+                                            {this.state.training_result_snack.message}
+                                        </Alert>
+                                    </Snackbar>
                                 </div>
+                                
                             </React.Fragment>
                         )} />
                         <Route exact path='/' render={props => (

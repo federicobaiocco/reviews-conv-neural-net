@@ -140,7 +140,7 @@ def pending_reviews():
         for document in documents:
             document['_id'] = str(document['_id'])
             response.append(document)
-        return jsonify(response[:10]), 200
+        return jsonify(response), 200
 
 @app.route('/train_model', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -148,17 +148,18 @@ def train_model_endpoint():
     if request.method == 'POST':
         train_data = pd.DataFrame(list(mongo.db.train_data.find({"used":0})))
         mongo.db.train_data.update_many({"used":0},{"$set": {"used":1, "used_date": str(date.today())}})
-        #Approved
-        approved_train_data = train_data[train_data.state == 1][['text','state']]
-        all_approved = pd.read_csv("./reviews_cnn_package/datasets/all_approved.csv")[['text','state']]
-        all_approved_updated = all_approved.append(approved_train_data)
-        all_approved_updated.to_csv('./reviews_cnn_package/datasets/all_approved.csv', index=False)
+        if train_data.shape[0] > 0:
+            #Approved
+            approved_train_data = train_data[train_data.state == 1][['text','state']]
+            all_approved = pd.read_csv("./reviews_cnn_package/datasets/all_approved.csv")[['text','state']]
+            all_approved_updated = all_approved.append(approved_train_data)
+            all_approved_updated.to_csv('./reviews_cnn_package/datasets/all_approved.csv', index=False)
 
-        #Disapproved
-        disapproved_train_data = train_data[train_data.state == 0][['text','state']]
-        all_disapproved = pd.read_csv("./reviews_cnn_package/datasets/all_disapproved.csv")[['text','state']]
-        all_disapproved_updated = all_disapproved.append(disapproved_train_data)
-        all_disapproved_updated.to_csv('./reviews_cnn_package/datasets/all_disapproved.csv', index=False)
+            #Disapproved
+            disapproved_train_data = train_data[train_data.state == 0][['text','state']]
+            all_disapproved = pd.read_csv("./reviews_cnn_package/datasets/all_disapproved.csv")[['text','state']]
+            all_disapproved_updated = all_disapproved.append(disapproved_train_data)
+            all_disapproved_updated.to_csv('./reviews_cnn_package/datasets/all_disapproved.csv', index=False)
 
         #Train with all data
         result = train_model()

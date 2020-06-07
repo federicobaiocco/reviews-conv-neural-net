@@ -23,7 +23,7 @@ class Reviews extends Component{
 
     render() {
         return (
-            <TableContainer style={{margin: '20px auto'}} component={Paper}>
+            <TableContainer style={{margin: '20px auto', maxHeight: 400, overflowY: 'scroll'}} component={Paper}>
                 <Table aria-label="simple table">
                         <TableHead>
                         <TableRow>
