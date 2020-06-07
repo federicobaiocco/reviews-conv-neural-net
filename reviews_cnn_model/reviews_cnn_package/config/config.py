@@ -8,7 +8,7 @@ DROPOUT = 0.5
 BATCH_SIZE = 32
 EPOCHS = 25
 LEARNING_RATE = 1e-3
-EARLY_STOPPING_PATIENCE = 3
+EARLY_STOPPING_PATIENCE = 5
 
 #STOP WORDS
 insurance_company_names = ['falabella','sura','rivadavia','allianz','hdi','pelayo','verti','ocaso','iati','meridional','sancor','prudential','patagonia']

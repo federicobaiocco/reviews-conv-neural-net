@@ -82,6 +82,7 @@ class TextPreprocessor():
         string = re.sub(r"\)", " \) ", string)
         string = re.sub(r"\?", " \? ", string)
         string = re.sub(r"\s{2,}", " ", string) #2 spaces
+        string = re.sub(r'[^\w\s]|(.)(?=\1)', '', string) #repeated chars such as hhholaaa = hola
         string = self.strip_accents(string)
         #replace words according the transform_dict
         string = ''.join(config.transform_dict[w.lower()] if w.lower() in config.transform_dict else w for w in re.split(r'(\W+)', string))
