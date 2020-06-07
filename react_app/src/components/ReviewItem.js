@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 class ReviewItem extends Component{
     getStyle = () => {
@@ -11,19 +13,17 @@ class ReviewItem extends Component{
     };
 
     render() {
-        const { text, prediction } = this.props.review;
+        const { prediction } = this.props.review;
         const review = this.props.review;
         return (
-            <tr>
-                <td style={{textAlign : 'left'}}>{text}</td>
-                <td style={{textAlign : 'center', color: prediction === 1 ? 'green': 'red'}}>{prediction == 1 ? 'APPROVED' : 'DISAPPROVED'}</td>
-                <td style={{textAlign : 'center'}}>
-                    <button onClick={this.props.approveReview.bind(this, review)} style={approveBtnStyle}>✓</button>
-                </td>
-                <td style={{textAlign : 'center'}}>
-                    <button onClick={this.props.disapproveReview.bind(this, review)} style={disapproveBtnStyle}>X</button>
-                </td>
-            </tr>
+            <TableRow key={review._id}>
+              <TableCell component="th" scope="row">
+                {review.text}
+              </TableCell>
+              <TableCell align="center" style={{textAlign : 'center', color: prediction === 1 ? 'green': 'red'}}>{prediction === 1 ? 'APPROVED' : 'DISAPPROVED'}</TableCell>
+              <TableCell align="center"><button onClick={this.props.approveReview.bind(this, review)} style={approveBtnStyle}>✓</button></TableCell>
+              <TableCell align="center"><button onClick={this.props.disapproveReview.bind(this, review)} style={disapproveBtnStyle}>X</button></TableCell>
+            </TableRow>
         )
     }
 }

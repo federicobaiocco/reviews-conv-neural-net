@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 import ReviewItem from './ReviewItem';
 import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 class Reviews extends Component{
 
@@ -16,19 +23,21 @@ class Reviews extends Component{
 
     render() {
         return (
-            <table style={{margin: '20px auto'}}>
-                <thead>
-                    <tr>
-                        <th style={{width: '35%', textAlign : 'center'}}>Text</th>
-                        <th style={{width: '15%', textAlign : 'center'}}>Prediction</th>
-                        <th style={{width: '15%', textAlign : 'center'}}>Mark as approved</th>
-                        <th style={{width: '15%', textAlign : 'center'}}>Mark as disapproved</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.reviewsList()}
-                </tbody>
-            </table>
+            <TableContainer style={{margin: '20px auto'}} component={Paper}>
+                <Table aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell style={{width: '25%'}} align="center">Text</TableCell>
+                            <TableCell style={{width: '15%'}} align="center">Prediction</TableCell>
+                            <TableCell style={{width: '20%'}} align="center">Mark as approved</TableCell>
+                            <TableCell style={{width: '20%'}} align="center">Mark as disapproved</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.reviewsList()}
+                        </TableBody>
+                </Table>
+            </TableContainer>
         )
     }
 }

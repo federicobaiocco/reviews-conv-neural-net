@@ -6,6 +6,10 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css'
 import axios from 'axios';
 import ApprovedReviews from './components/ApprovedReviews';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
 class App extends Component{
     state = {
@@ -14,7 +18,14 @@ class App extends Component{
         ],
         approvedReviews: [
             {}
-        ]
+        ],
+        waitingPrediction: false,
+        snack:
+        {
+            type: 'success',
+            open: false,
+            message: ''
+        }
     };
 
     componentDidMount() {
@@ -76,6 +87,11 @@ class App extends Component{
 
     addReview = (text) => {
         let prediction;
+        this.setState(prevState => ({
+            approvedReviews: [...prevState.approvedReviews],
+            reviews: [...prevState.reviews],
+            waitingPrediction: true
+        }))
         axios.post('http://localhost:5000/predict', {
             'review_text': text
         }).then(res => {
@@ -91,8 +107,10 @@ class App extends Component{
                 }
                 this.setState(prevState => ({
                     approvedReviews: [...prevState.approvedReviews, rev],
-                    reviews: [...prevState.reviews, rev]
+                    reviews: [...prevState.reviews, rev],
+                    waitingPrediction: false
                 }))
+                this.handleOpen('Your comment is approved! 😎. Thanks for your feedback! 😀', 'success')
             } else if (prediction === 0 ){
                 let rev = {
                     'text': text,
@@ -103,8 +121,10 @@ class App extends Component{
                 }
                 this.setState(prevState => ({
                     approvedReviews: [...prevState.approvedReviews],
-                    reviews: [...prevState.reviews, rev]
+                    reviews: [...prevState.reviews, rev],
+                    waitingPrediction: false
                 }))
+                this.handleOpen('We just received your comments 🙌. Our team will check it soon. Thanks! 😀', 'info')
             }
         });
     }
@@ -115,6 +135,28 @@ class App extends Component{
             console.log(res)
         })
     }
+
+    handleOpen = (message, type) => this.setState( prevState => ({ 
+        approvedReviews: [...prevState.approvedReviews],
+        reviews: [...prevState.reviews],
+        waitingPrediction: false,
+        snack: {
+            open: true,
+            message: message,
+            type: type
+        }
+    }))
+
+    handleClose = () => this.setState( prevState => ({ 
+        approvedReviews: [...prevState.approvedReviews],
+        reviews: [...prevState.reviews],
+        waitingPrediction: false,
+        snack: {
+            open: false,
+            message: '..',
+            type: 'info'
+        }
+    }))
 
     render() {
         return (
@@ -128,14 +170,36 @@ class App extends Component{
                                        approveReview = {this.approveReview}
                                        disapproveReview={this.disapproveReview}/>
                                 <div>
-                                <button onClick={this.trainModel.bind(this)}>Train model</button>
+                                <Button onClick={this.trainModel.bind(this)}
+                                        variant="contained" 
+                                        color="primary">
+                                    Train model
+                                </Button>
                                 </div>
                             </React.Fragment>
                         )} />
                         <Route exact path='/' render={props => (
                             <React.Fragment>
-                                <ApprovedReviews reviews = {this.state.approvedReviews}/>
-                                <AddReview addReview={this.addReview}/>
+                                <div style={{'maxHeight': 350, 'overflowY': 'scroll'}}>
+                                    <ApprovedReviews reviews = {this.state.approvedReviews}/>
+                                </div>
+                                { 
+                                this.state.waitingPrediction ? 
+                                    <div style={{'textAlign': 'center', 'marginTop': 15}}>
+                                        <CircularProgress />
+                                        <p>
+                                            We're checking your comment
+                                        </p>
+                                    </div> : 
+                                    <AddReview addReview={this.addReview}/>
+                                }
+                                <div>    
+                                    <Snackbar open={this.state.snack.open} autoHideDuration={6000} onClose={this.handleClose}>
+                                        <Alert onClose={this.handleClose} severity={this.state.snack.type}>
+                                            {this.state.snack.message}
+                                        </Alert>
+                                    </Snackbar>
+                                </div>
                             </React.Fragment>
                         )}/>
                     </div>

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 class AddReview extends Component{
 
@@ -20,18 +22,22 @@ class AddReview extends Component{
     render() {
         return (
             <form onSubmit={this.onSubmit} style={{display: 'flex'}}>
-                <input type="text"
-                       name="text"
-                       style={{flex: '10', padding: '5px'}}
-                       placeholder="Add Review"
-                       value={this.state.text}
-                       onChange={this.onChangeInput}
-                />
-                <input type="submit"
-                       value="Submit"
-                       className="btn"
-                       style={{flex: '1'}}
-                />
+                <TextField  id="standard-required" 
+                            type="text"
+                            name="text"
+                            required
+                            variant="filled"
+                            style={{flex: '10', padding: '5px'}}
+                            value={this.state.text}
+                            onChange={this.onChangeInput}
+                            label="Add review" />
+                <Button type="submit"
+                        value="Submit"
+                        style={{flex: '1', padding: '3px'}} 
+                        variant="contained" 
+                        color="primary">
+                Submit
+                </Button>
             </form>
         )
     }
