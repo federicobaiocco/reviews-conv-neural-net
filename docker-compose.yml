@@ -11,6 +11,15 @@ services:
       - env=prod
       - DB=mongodb://mongodb:27017/reviews_db
     command: gunicorn -w 1 -b 0.0.0.0:8000 wsgi:app
+
+  react_app:
+    container_name: react_app
+    restart: always
+    build: ./react_app
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
   
   nginx:
     container_name: nginx
@@ -20,6 +29,7 @@ services:
       - "80:80"
     depends_on:
       - api
+      - react_app
 
   mongodb:
     image: mongo:latest
@@ -32,11 +42,3 @@ services:
     ports:
       - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null # --quiet
-  
-  react_app:
-    container_name: react_app
-    build: ./react_app
-    ports:
-      - "3000:80"
-    environment:
-      - NODE_ENV=production
