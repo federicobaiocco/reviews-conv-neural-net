@@ -40,6 +40,8 @@ services:
       - react_app
     volumes: 
       - build-volume:/usr/share/nginx/html
+    links:
+      - api
 
   mongodb:
     image: mongo:latest
