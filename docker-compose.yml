@@ -21,7 +21,7 @@ services:
     environment:
       - NODE_ENV=production
     volumes: 
-      - build-volume:/react_app/build
+      - build-volume: /react_app/build
   
   nginx:
     container_name: nginx
@@ -33,7 +33,7 @@ services:
       - api
       - react_app
     volumes: 
-      - build-volume:/usr/share/nginx/html
+      - build-volume: /usr/share/nginx/html
 
   mongodb:
     image: mongo:latest
