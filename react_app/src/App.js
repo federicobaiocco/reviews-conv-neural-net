@@ -12,7 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 class App extends Component{
-    api_url = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : 'http://localhost:5000/'
+    api_url = 'http://api:8000/' // 'http://localhost:5000/'
     state = {
         reviews: [
             {}
