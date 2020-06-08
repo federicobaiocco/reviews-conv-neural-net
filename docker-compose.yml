@@ -20,6 +20,8 @@ services:
       - "3000:80"
     environment:
       - NODE_ENV=production
+    volumes: 
+      - build-volume:/react_app/build
   
   nginx:
     container_name: nginx
@@ -30,6 +32,8 @@ services:
     depends_on:
       - api
       - react_app
+    volumes: 
+      - build-volume:/usr/share/nginx/html
 
   mongodb:
     image: mongo:latest
@@ -42,3 +46,6 @@ services:
     ports:
       - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null # --quiet
+  
+volumes: 
+  - build-volume:
