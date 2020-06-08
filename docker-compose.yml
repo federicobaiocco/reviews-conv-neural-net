@@ -22,7 +22,7 @@ services:
       - "3000:80"
     environment:
       - NODE_ENV=production
-      - API_URL=http://api:8000/
+      - REACT_APP_API_URL=http://api:8000/
     stdin_open: true
     volumes: 
       - build-volume:/react_app/build
