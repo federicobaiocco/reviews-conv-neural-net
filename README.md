@@ -6,4 +6,4 @@ Run de project:
 
 - Set api_url in /react_app/src/App.js
 - Install docker and docker compose
-- run docker-compose up --build in root directory
+- run <i>docker-compose up --build</i> in root directory
