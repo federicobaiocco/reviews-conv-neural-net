@@ -12,7 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 class App extends Component{
-    api_url = 'http://localhost:8000/'
+    api_url = process.env.API_URL ? process.env.API_URL : 'http://localhost:5000/'
     state = {
         reviews: [
             {}
@@ -40,6 +40,7 @@ class App extends Component{
     componentDidMount() {
         this.getReviews();
         this.getAppovedReviews(); 
+        console.log('API: ',this.api_url)
     }
 
     getReviews() {

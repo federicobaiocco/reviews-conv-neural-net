@@ -11,6 +11,8 @@ services:
       - env=prod
       - DB=mongodb://mongodb:27017/reviews_db
     command: gunicorn -w 1 -b 0.0.0.0:8000 wsgi:app
+    links:
+      - mongodb
 
   react_app:
     container_name: react_app
@@ -20,9 +22,12 @@ services:
       - "3000:80"
     environment:
       - NODE_ENV=production
+      - API_URL=http://api:8000/
     stdin_open: true
     volumes: 
       - build-volume:/react_app/build
+    links:
+      - api
   
   nginx:
     container_name: nginx
