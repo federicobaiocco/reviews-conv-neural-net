@@ -43,7 +43,7 @@ class App extends Component{
     }
 
     getReviews() {
-        axios.get(api_url+'reviews/pending')
+        axios.get(this.api_url+'reviews/pending')
         .then( res => {
             this.setState({
                 reviews: res.data
@@ -52,7 +52,7 @@ class App extends Component{
     }
 
     getAppovedReviews() {
-        axios.get(api_url+'reviews/approved')
+        axios.get(this.api_url+'reviews/approved')
         .then( res => {
             this.setState({
                 approvedReviews: res.data
@@ -70,7 +70,7 @@ class App extends Component{
                 "true_label": 1
             }
         }
-        axios.patch(api_url+'reviews', req_data)
+        axios.patch(this.api_url+'reviews', req_data)
         .then(res => {
             this.getAppovedReviews();
             this.getReviews();
@@ -87,7 +87,7 @@ class App extends Component{
                 "true_label": 0
             }
         }
-        axios.patch(api_url+'reviews', req_data)
+        axios.patch(this.api_url+'reviews', req_data)
         .then(res => {
             this.getAppovedReviews();
             this.getReviews();
@@ -101,7 +101,7 @@ class App extends Component{
             reviews: [...prevState.reviews],
             waitingPrediction: true
         }))
-        axios.post(api_url+'predict', {
+        axios.post(this.api_url+'predict', {
             'review_text': text
         }).then(res => {
             console.log(res.data.prediction)
@@ -142,7 +142,7 @@ class App extends Component{
         this.setState(prevState => ({
             training: true
         }))
-        axios.post(api_url+'train_model')
+        axios.post(this.api_url+'train_model')
         .then( res => {
             console.log(res)
             this.setState(prevState => ({
