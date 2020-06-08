@@ -6,7 +6,7 @@ COPY package.json /react_app/package.json
 RUN export REACT_APP_API_URL='http://api:8000/'
 RUN npm install
 COPY . /react_app
-RUN npm run build
+RUN npm run build --prod
 
 #FROM nginx:alpine
 #COPY --from=react_app /react_app/build /usr/share/nginx/html
