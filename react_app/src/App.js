@@ -12,6 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 
 class App extends Component{
+    api_url = 'http://localhost:8000/'
     state = {
         reviews: [
             {}
@@ -42,7 +43,7 @@ class App extends Component{
     }
 
     getReviews() {
-        axios.get('http://localhost:5000/reviews/pending')
+        axios.get(api_url+'reviews/pending')
         .then( res => {
             this.setState({
                 reviews: res.data
@@ -51,7 +52,7 @@ class App extends Component{
     }
 
     getAppovedReviews() {
-        axios.get('http://localhost:5000/reviews/approved')
+        axios.get(api_url+'reviews/approved')
         .then( res => {
             this.setState({
                 approvedReviews: res.data
@@ -69,7 +70,7 @@ class App extends Component{
                 "true_label": 1
             }
         }
-        axios.patch('http://localhost:5000/reviews', req_data)
+        axios.patch(api_url+'reviews', req_data)
         .then(res => {
             this.getAppovedReviews();
             this.getReviews();
@@ -86,7 +87,7 @@ class App extends Component{
                 "true_label": 0
             }
         }
-        axios.patch('http://localhost:5000/reviews', req_data)
+        axios.patch(api_url+'reviews', req_data)
         .then(res => {
             this.getAppovedReviews();
             this.getReviews();
@@ -100,7 +101,7 @@ class App extends Component{
             reviews: [...prevState.reviews],
             waitingPrediction: true
         }))
-        axios.post('http://localhost:5000/predict', {
+        axios.post(api_url+'predict', {
             'review_text': text
         }).then(res => {
             console.log(res.data.prediction)
@@ -141,7 +142,7 @@ class App extends Component{
         this.setState(prevState => ({
             training: true
         }))
-        axios.post('http://localhost:5000/train_model')
+        axios.post(api_url+'train_model')
         .then( res => {
             console.log(res)
             this.setState(prevState => ({
