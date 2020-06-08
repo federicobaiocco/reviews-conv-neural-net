@@ -2,7 +2,7 @@
 
 Convolutional Neural Network for text classification consumed by react app.
 
-Run de project:
+Run the project:
 
 - Set api_url in /react_app/src/App.js
 - Install docker and docker compose
