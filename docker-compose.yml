@@ -20,6 +20,7 @@ services:
       - "3000:80"
     environment:
       - NODE_ENV=production
+    stdin_open: true
     volumes: 
       - build-volume:/react_app/build
   
@@ -45,7 +46,7 @@ services:
       - ./data/db:/usr/data/db
     ports:
       - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+    command: mongod #--smallfiles --logpath=/dev/null # --quiet
   
 volumes: 
   build-volume:
