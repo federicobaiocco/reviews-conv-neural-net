@@ -1,6 +1,7 @@
 ﻿# Reviews CNN
 
-Convolutional Neural Network for text classification consumed by react app.
+Convolutional Neural Network for reviews classification.
+In this repository there is a simple react app to test it as well.
 
 Run the project:
 
