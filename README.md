@@ -1,7 +1,6 @@
 ﻿# Reviews CNN
 
-Convolutional Neural Network for reviews classification.
-There is a simple react app to test it this repository it as well.
+Convolutional Neural Network for reviews classification consumed by react app.
 
 Run the project:
 
